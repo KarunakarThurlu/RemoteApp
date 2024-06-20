@@ -12,13 +12,16 @@ export default defineConfig({
       exposes: {
         './ColumnChart': './src/Components/ColumnChart.jsx',
       },
-      shared: ['react', 'react-dom','highcharts-react-official'],
+      shared: ['react', 'react-dom', 'highcharts-react-official'],
     }),
   ],
-  build:{
-    target:'esnext'
+  build: {
+    target: 'esnext'
   },
-  server:{
-    port:8081
+  server: {
+    port: 8081,
+    headers: {
+      'access-control-allow-origin': '*'
+    }
   }
 })
