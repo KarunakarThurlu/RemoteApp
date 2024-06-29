@@ -44,7 +44,17 @@ app.use((req, res, next) => {
 app.use(cors(corsOptions));
 
 
-app.use(express.static(path.join(process.cwd(), './client/dist')));
+app.use(express.static(path.join(process.cwd(), './client/dist'), {
+    setHeaders: (res, filePath) => {
+        if (filePath.endsWith('.js')) {
+            res.setHeader('Content-Type', 'application/javascript');
+        } else if (filePath.endsWith('.css')) {
+            res.setHeader('Content-Type', 'text/css');
+        } else if (filePath.endsWith('.html')) {
+            res.setHeader('Content-Type', 'text/html');
+        }
+    }
+}));
 app.get('/*', (req, res) => {
     res.sendFile(path.join(process.cwd(), './client/dist', 'index.html'));
 });
