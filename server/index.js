@@ -28,6 +28,19 @@ const corsOptions = {
     credentials: true // Allow credentials if needed
 };
 
+
+// Middleware to set MIME types
+app.use((req, res, next) => {
+    if (req.path.endsWith('.js')) {
+        res.setHeader('Content-Type', 'application/javascript');
+    } else if (req.path.endsWith('.css')) {
+        res.setHeader('Content-Type', 'text/css');
+    } else if (req.path.endsWith('.html')) {
+        res.setHeader('Content-Type', 'text/html');
+    }
+    next();
+});
+
 app.use(cors(corsOptions));
 
 
