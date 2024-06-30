@@ -12,7 +12,8 @@ app.use("/info", (req, res) => {
 
 // Define your allowed origins
 const allowedOrigins = [
-    'https://reactapp-m3tu.onrender.com'
+    'https://reactapp-m3tu.onrender.com',
+    'http://localhost:4173'
 ];
 
 // Set up CORS middleware
@@ -28,6 +29,7 @@ const corsOptions = {
     credentials: true // Allow credentials if needed
 };
 
+app.use(cors(corsOptions));
 
 // Middleware to set MIME types
 app.use((req, res, next) => {
@@ -41,21 +43,15 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use(cors(corsOptions));
 
 
-app.use(express.static(path.join(process.cwd(), './client/dist'), {
-    setHeaders: (res, filePath) => {
-        if (filePath.endsWith('.js')) {
-            res.setHeader('Content-Type', 'application/javascript');
-        } else if (filePath.endsWith('.css')) {
-            res.setHeader('Content-Type', 'text/css');
-        } else if (filePath.endsWith('.html')) {
-            res.setHeader('Content-Type', 'text/html');
-        }
-    }
-}));
-app.get('/*', (req, res) => {
+
+app.use(express.static(path.join(process.cwd(), './client/dist')));
+
+app.get('/assets/remoteEntry.js', (req, res) => {
+    res.sendFile(path.join(process.cwd(), './client/dist/assets/', 'remoteEntry.js'));
+  });
+app.get('*', (req, res) => {
     res.sendFile(path.join(process.cwd(), './client/dist', 'index.html'));
 });
 
